@@ -1,0 +1,143 @@
+import pandas as pd
+import random
+from faker import Faker
+from sqlalchemy import create_engine
+
+# Inicializa o Faker
+fake = Faker('pt_BR')
+
+# Configurações de conexão com o banco de dados
+DATABASE_TYPE = 'postgresql'  # Ou 'postgresql' para PostgreSQL
+DBAPI = 'psycopg2'  # Ou 'psycopg2' para PostgreSQL
+ENDPOINT = 'servidor'  # Endereço do servidor do banco de dados
+USER = 'user'
+PASSWORD = 'password'
+PORT = '5432'  # Porta padrão para PostgreSQL.
+DATABASE = 'seu_database'
+
+# Cria a conexão com o banco de dados
+connection_string = f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}"
+engine = create_engine(connection_string)
+
+# Definir o número de registros
+num_clientes = 600
+num_enderecos = 600
+num_produtos = 150
+num_vendedores = 25
+num_datas = 365  # Dias de um ano
+num_vendas = 800  # Vendas para a tabela de fatos
+
+# Gerar dados para DIM_ENDEREÇO
+enderecos = []
+for i in range(1, num_enderecos + 1):
+    enderecos.append({
+        "ID_ENDEREÇO": i,
+        "CIDADE_CLIENTE": fake.city(),
+        "ESTADO_CLIENTE": fake.state_abbr()
+    })
+df_enderecos = pd.DataFrame(enderecos)
+
+# Inserindo dados na tabela DIM_ENDEREÇO
+df_enderecos.to_sql('DIM_ENDEREÇO', con=engine, if_exists='append', index=False)
+
+# Gerar dados para DIM_PRODUTOS
+produtos = []
+categorias_produtos = ['Eletrônicos', 'Roupas', 'Alimentos']
+for i in range(1, num_produtos + 1):
+    produtos.append({
+        "ID_PRODUTO": i,
+        "CATEGORIA_PRODUTO": random.choice(categorias_produtos),
+        "NOME_PRODUTO": fake.word(),
+        "QTD_ESTOQUE": random.randint(0, 100),
+        "PREÇO_UNITÁRIO": round(random.uniform(10.0, 500.0), 2)
+    })
+df_produtos = pd.DataFrame(produtos)
+
+# Inserindo dados na tabela DIM_PRODUTOS
+df_produtos.to_sql('DIM_PRODUTOS', con=engine, if_exists='append', index=False)
+
+# Gerar dados para DIM_VENDEDORES
+vendedores = []
+for i in range(1, num_vendedores + 1):
+    vendedores.append({
+        "ID_VENDEDOR": i,
+        "NOME_VENDEDOR": fake.name(),
+        "IDADE_VENDEDOR": random.randint(20, 50),
+        "QTD_VENDIDA": 0,  # Será preenchido após as vendas
+        "VALOR_VENDIDO": 0.0  # Será preenchido após as vendas
+    })
+df_vendedores = pd.DataFrame(vendedores)
+
+# Inserindo dados na tabela DIM_VENDEDORES
+df_vendedores.to_sql('DIM_VENDEDORES', con=engine, if_exists='append', index=False)
+
+# Gerar dados para DIM_DATA
+datas = []
+for i in range(num_datas):
+    data = fake.date_between(start_date='-1y', end_date='today')
+    datas.append({
+        "ID_DATA": i + 1,
+        "ANO": data.year,
+        "SEMESTRE": 1 if data.month <= 6 else 2,
+        "TRIMESTRE": (data.month - 1) // 3 + 1,
+        "MÊS": data.month,
+        "DIA": data.day,
+        "FERIADO": random.choice([0, 1])  # 0 para dia normal, 1 para feriado
+    })
+df_datas = pd.DataFrame(datas)
+
+# Inserindo dados na tabela DIM_DATA
+df_datas.to_sql('DIM_DATA', con=engine, if_exists='append', index=False)
+
+# Gerar dados para DIM_CLIENTES
+clientes = []
+for i in range(1, num_clientes + 1):
+    endereco_id = random.randint(1, num_enderecos)
+    clientes.append({
+        "ID_CLIENTE": i,
+        "NOME_CLIENTE": fake.name(),
+        "ID_ENDEREÇO": endereco_id,
+        "SEXO_CLIENTE": random.choice(['M', 'F']),
+        "IDADE_CLIENTE": random.randint(18, 70),
+        "ESTADO_CIVIL": random.choice(['Solteiro', 'Casado', 'Divorciado']),
+        "EMAIL_CLIENTE": fake.email(),
+        "TELEFONE_CLIENTE": fake.phone_number(),
+        "QTD_FILHOS": random.randint(0, 3)
+    })
+df_clientes = pd.DataFrame(clientes)
+
+# Verificar IDs de endereços para garantir que todos estejam presentes
+valid_endereco_ids = set(df_enderecos['ID_ENDEREÇO'])
+df_clientes = df_clientes[df_clientes['ID_ENDEREÇO'].isin(valid_endereco_ids)]
+
+# Inserindo dados na tabela DIM_CLIENTES
+df_clientes.to_sql('DIM_CLIENTES', con=engine, if_exists='append', index=False)
+
+# Gerar dados para FT_VENDAS
+vendas = []
+for i in range(1, num_vendas + 1):
+    id_vendedor = random.randint(1, num_vendedores)
+    id_produto = random.randint(1, num_produtos)
+    qtd_vendida = random.randint(1, 10)
+    valor_vendido = df_produtos.loc[df_produtos['ID_PRODUTO'] == id_produto, 'PREÇO_UNITÁRIO'].values[0] * qtd_vendida
+    
+    # Atualizar total vendido por vendedor
+    df_vendedores.loc[df_vendedores['ID_VENDEDOR'] == id_vendedor, 'QTD_VENDIDA'] += qtd_vendida
+    df_vendedores.loc[df_vendedores['ID_VENDEDOR'] == id_vendedor, 'VALOR_VENDIDO'] += valor_vendido
+    
+    vendas.append({
+        "ID_VENDA": i,
+        "ID_PRODUTO": id_produto,
+        "ID_VENDEDOR": id_vendedor,
+        "ID_DATA": random.randint(1, num_datas),
+        "ID_CLIENTE": random.randint(1, num_clientes),
+        "QTD_VENDIDA": qtd_vendida,
+        "CANAL_VENDA": random.choice(['Online', 'Loja Física']),
+        "FORMA_PAGAMENTO": random.choice(['Cartão de Crédito', 'Dinheiro'])
+    })
+df_vendas = pd.DataFrame(vendas)
+
+# Inserindo dados na tabela FT_VENDAS
+df_vendas.to_sql('FT_VENDAS', con=engine, if_exists='append', index=False)
+
+print("Dados inseridos com sucesso!")
