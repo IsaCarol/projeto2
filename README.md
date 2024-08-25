@@ -1,4 +1,4 @@
-#.    Em execução 
+
 
 # Análise de Vendas 2.0
 
