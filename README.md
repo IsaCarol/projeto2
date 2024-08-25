@@ -1,3 +1,5 @@
+#.    Em execução 
+
 # Análise de Vendas 2.0
 
 Bem-vindo(a) ao meu projeto de Análise de Vendas
