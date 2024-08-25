@@ -47,17 +47,21 @@ Carregado os dados, é hora de começar a análise.
 # Link dos arquivos
 
 * Análise de Desempenho de Produtos
+
 ![Análise de Desempenho de Produtos](./analiseproduto.png)
 
 
 * Análise Temporal de Vendas
-[Análise Desempenho Tempo](analisetempo.png)
+
+![Análise Temporal de Vendas](./analisetempo.png)
 
 * Análise de Desempenho de Vendedores
-[Análise Desempenho dos Vendedores](https://github.com/IsaCarol/projeto2/blob/main/analisevendedor%20.png)
+
+![Análise de Desempenho Vendedores](./analisevendedor.png)
 
 * Análise Perfil do Cliente
-[Análise Perfil Cliente](analisecliente.png)
+
+![Análise Perfil Cliente](./analisecliente.png)
 
 
 * Veja o vídeo do projeto [https://drive.google.com/file/d/1A2B3C4D5E6F7G8H9/view?usp=sharing](https://drive.google.com/drive/folders/1jjD3sXFUctN7KVr8DHfr8tYDQ9-xwqJ1?usp=sharing)
