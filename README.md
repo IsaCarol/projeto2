@@ -47,7 +47,8 @@ Carregado os dados, é hora de começar a análise.
 # Link dos arquivos
 
 * Análise de Desempenho de Produtos
-[Análise Desempenho dos Produtos](analiseproduto.png)
+![Análise de Desempenho de Produtos](./analiseprodutopng)
+
 
 * Análise Temporal de Vendas
 [Análise Desempenho Tempo](analisetempo.png)
