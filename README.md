@@ -59,7 +59,7 @@ Carregado os dados, é hora de começar a análise.
 [Análise Perfil Cliente](analisecliente.png)
 
 
-[Veja o vídeo do projeto]([https://drive.google.com/file/d/1A2B3C4D5E6F7G8H9/view?usp=sharing](https://drive.google.com/drive/folders/1jjD3sXFUctN7KVr8DHfr8tYDQ9-xwqJ1?usp=sharing)
+Veja o vídeo do projeto([https://drive.google.com/file/d/1A2B3C4D5E6F7G8H9/view?usp=sharing](https://drive.google.com/drive/folders/1jjD3sXFUctN7KVr8DHfr8tYDQ9-xwqJ1?usp=sharing)
 
 
 
