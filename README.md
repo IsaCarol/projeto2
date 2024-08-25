@@ -57,7 +57,7 @@ Carregado os dados, é hora de começar a análise.
 
 * Análise de Desempenho de Vendedores
 
-![Análise de Desempenho Vendedores](./[analisevendedor.png](https://github.com/IsaCarol/projeto2/blob/main/analisevendedor%20.png))
+![Análise de Desempenho Vendedores](./https://github.com/IsaCarol/projeto2/blob/main/analisevendedor%20.png)
 
 * Análise Perfil do Cliente
 
