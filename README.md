@@ -53,7 +53,7 @@ Carregado os dados, é hora de começar a análise.
 [Análise Desempenho Tempo](analisetempo.png)
 
 * Análise de Desempenho de Vendedores
-[Análise Desempenho dos Venderoes](analisevendedor.png)
+[Análise Desempenho dos Vendedores](https://github.com/IsaCarol/projeto2/blob/main/analisevendedor%20.png)
 
 * Análise Perfil do Cliente
 [Análise Perfil Cliente](analisecliente.png)
